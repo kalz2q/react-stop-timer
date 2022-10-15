@@ -29,7 +29,6 @@ function App() {
 
   requestAnimationFrame(() => setTime(calcTime()));
 
-
   return (
     <div className="App">
       <p>timer (sec): {Math.floor(time / 1000)}</p>

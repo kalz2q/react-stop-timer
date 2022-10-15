@@ -1,8 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
-// toggle start/stop button
 
-const { useState, useEffect } = React;
 function App() {
   useEffect(() => {
     document.title = "stop-timer";
@@ -17,29 +15,34 @@ function App() {
       : stoppedTime + new Date().getTime() - lastStartedAt;
   };
 
-  const timer = () => {
+  const onClick = () => {
     if (lastStartedAt === 0) {
       setLastStartedAt(new Date().getTime());
-    } else {
-      setStoppedTime(calcTime());
-      setLastStartedAt(0);
+      return;
     }
+    setStoppedTime(calcTime());
+    setLastStartedAt(0);
     return;
   };
 
-  requestAnimationFrame(() => setTime(calcTime()));
+  // useEffect(() => {
+  //   const requestId = requestAnimationFrame(() => setTime(calcTime()));
+  //   return () => cancelAnimationFrame(requestId);
+  // });
 
+  requestAnimationFrame(() => setTime(calcTime()));
+  // setInterval(() => setTime(calcTime()));
 
   return (
     <div className="App">
       <p>timer (sec): {Math.floor(time / 1000)}</p>
       <p>timer (ms): {time}</p>
       <p>
-        <button onClick={() => timer()}>
+        <button onClick={onClick}>
           {lastStartedAt === 0 ? "start" : "stop"}
         </button>
       </p>
-    </div >
+    </div>
   );
 }
 
