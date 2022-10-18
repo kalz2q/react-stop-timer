@@ -10,7 +10,8 @@ function App() {
   const [stoppedTime, setStoppedTime] = useState(0);
   const [time, setTime] = useState(0);
   const [lastStartedAt, setLastStartedAt] = useState(0);
-  const delay = 1000;
+  const delay = 2000;
+
   const calcTime = () => {
     return lastStartedAt === 0
       ? stoppedTime
