@@ -1,0 +1,43 @@
+import React from 'react';
+import './App.css';
+const { useEffect, useRef, useState, useCallback } = React;
+
+function App() {
+  const [counter, setCounter] = useState(0);
+  const [isRunning, setIsRunning] = useState(false);
+
+  const useAnimationFrame = (isRunning: boolean, callback = () => { }) => {
+    const reqIdRef = useRef<number>();
+    const loop = useCallback(() => {
+      if (isRunning) {
+        reqIdRef.current = requestAnimationFrame(loop);
+        callback();
+      }
+    }, [isRunning, callback]);
+
+    useEffect(() => {
+      reqIdRef.current = requestAnimationFrame(loop);
+      let currentnum = 0;
+      currentnum = reqIdRef.current;
+      return () => cancelAnimationFrame(currentnum);
+    }, [loop]);
+  };
+
+
+  // setCounter するたびに関数を再生成するのを防ぐ
+  const countUp = useCallback(() => {
+    setCounter(prevCount => ++prevCount);
+  }, []);
+
+  useAnimationFrame(isRunning, countUp);
+
+  return (
+    <div className="App">
+      <div>{counter}</div>
+      <button onClick={() => setIsRunning(true)}>START</button>
+      <button onClick={() => setIsRunning(false)}>STOP</button>
+    </div>
+  );
+}
+
+export default App;

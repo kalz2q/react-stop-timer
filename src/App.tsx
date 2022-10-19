@@ -1,54 +1,30 @@
 import React from "react";
 import "./App.css";
-// toggle start/stop button
+// react-stop-timer を counter にする
+// isRunning で制御する
 
 const { useState, useEffect } = React;
+const delay = 1000;
+
 function App() {
-  useEffect(() => {
-    document.title = "stop-timer";
-  });
-  const [stoppedTime, setStoppedTime] = useState(0);
-  const [time, setTime] = useState(0);
-  const [lastStartedAt, setLastStartedAt] = useState(0);
-  const delay = 1000;
-  const calcTime = () => {
-    return lastStartedAt === 0
-      ? stoppedTime
-      : stoppedTime + new Date().getTime() - lastStartedAt;
-  };
+  const [counter, setCounter] = useState(0);
+  const [isRunning, setIsRunning] = useState(false);
+
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTime(calcTime());
+      if (isRunning) { setCounter(prevCount => prevCount + 1); }
     }, delay);
     return () => {
       clearInterval(interval);
     };
   });
 
-
-  const timer = () => {
-    if (lastStartedAt === 0) {
-      setLastStartedAt(new Date().getTime());
-    } else {
-      setStoppedTime(calcTime());
-      setLastStartedAt(0);
-    }
-    return;
-  };
-
-  // requestAnimationFrame(() => setTime(calcTime()));
-
-
   return (
     <div className="App">
-      <p>timer (sec): {Math.floor(time / 1000)}</p>
-      <p>timer (ms): {time}</p>
-      <p>
-        <button onClick={() => timer()}>
-          {lastStartedAt === 0 ? "start" : "stop"}
-        </button>
-      </p>
+      <div>{counter}</div>
+      <button onClick={() => setIsRunning(true)}>START</button>
+      <button onClick={() => { setIsRunning(false); console.log(counter) }}>STOP</button>
     </div >
   );
 }
